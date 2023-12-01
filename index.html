@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rick sanchez</title>
+    <script>
+        const newRandomNumber = Math.floor(Math.random() * 500) + 1;
+        fetch('https://rickandmortyapi.com/api/character/' + newRandomNumber)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.image, data.name)
+                document.getElementById('imageClase').src = data.image;
+
+            })
+        const newRandomNumber2 = Math.floor(Math.random() * 500) + 1;
+        fetch('https://rickandmortyapi.com/api/character/' + newRandomNumber2)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.image, data.name)
+                document.getElementById('imageClase1').src = data.image;
+
+            })
+    </script>
+</head>
+
+<body>
+    <img src="" id="imageClase" alt="Esperando...">
+    <img src="" id="imageClase1" alt="Esperando...">
+</body>
+
+</html>
