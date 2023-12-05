@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- Canvas: Es solo el area de dibujo -->
+    <!-- Solo se modifica mediante Javascript -->
+    <canvas id="dibujo" width="1920px" height="1080px" style="border-style: dashed; border-width: 1px;"></canvas>
+
+    <script>
+        var areaDibujo = document.getElementById("dibujo");
+        var ctx = areaDibujo.getContext("2d");
+
+        /*// Dibujar líneas horizontales separadas por x cm
+        for (var y = 0; y < 1920; y += 30) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(1920, y);
+            ctx.stroke();
+
+        // Dibujar líneas verticales encima de las horizontales separadas por x cm
+         for (var x = 0; x < 1920; x += 30) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, 1920);
+                ctx.stroke();
+            }
+        }*/
+
+        var areaDibujo = document.getElementById("dibujo");
+        var ctx = areaDibujo.getContext("2d");
+
+        var centerX = 1000; // Coordenada X del centro del lienzo
+        var centerY = 500; // Coordenada Y del centro del lienzo
+
+        var areaDibujo = document.getElementById("dibujo");
+        var ctx = areaDibujo.getContext("2d");
+
+        // Función para dibujar círculos concéntricos con intervalo
+        function drawConcentricCircles() {
+            var centerX = Math.random() * 1920; // Coordenada X del centro del lienzo
+            var centerY = Math.random() * 1080; // Coordenada Y del centro del lienzo
+            var radius = 5; // Radio inicial del círculo
+            var count = 0; // Contador para el bucle
+
+            var interval = setInterval(function() {
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius * count, 0, 3 * Math.PI);
+                ctx.stroke();
+                count++;
+
+                if (count > 450) {
+                    clearInterval(interval); // Detener el intervalo después de dibujar 120 círculos
+                    setTimeout(function() {
+                        ctx.clearRect(0, 0, areaDibujo.width, areaDibujo.height); // Limpiar el lienzo
+                        drawConcentricCircles(); // Llamar a la función nuevamente después de un retraso
+                    }, 10); // Esperar 2 segundos antes de reiniciar
+                }
+            }, 10); // Intervalo de tiempo en milisegundos (50 milisegundos)
+        }
+
+        drawConcentricCircles(); // Llamar a la función para iniciar el dibujo de círculos
+
+        /*for (var i = 1; i <= 1000; i++) {
+            ctx.beginPath();
+            var sideLength = i * 15;
+            var x = centerX - sideLength / 2;
+            var y = centerY - sideLength / 2;
+            ctx.rect(x, y, sideLength, sideLength);
+            ctx.stroke();
+        }*/
+    </script>
+</body>
+
+</html>
