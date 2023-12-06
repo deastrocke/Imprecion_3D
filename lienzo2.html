@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body>
+    <canvas id="areaDibujo" width="1920" height="1080"></canvas>
+    <script>
+        var canvas = document.getElementById("areaDibujo");
+        var ctx = canvas.getContext("2d");
+
+        var marioImagen = new Image();
+        marioImagen.src = 'mario.jpg';
+
+        var marioX = canvas.width / 2 - marioImagen.width / 400; // Centrar Mario horizontalmente
+        var marioY = canvas.height / 2 - marioImagen.height / 400; // Centrar Mario verticalmente
+        var speed = 5; // Ajusta la velocidad de movimiento
+        var diagonalSpeed = Math.sqrt(speed * speed / 2); // Velocidad diagonal basada en la velocidad de movimiento
+
+        // Array para almacenar los puntos del camino recorrido por Mario
+        var pathPoints = [];
+
+        function drawMario() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Dibujar las líneas del camino recorrido
+            for (var i = 1; i < pathPoints.length; i++) {
+                ctx.beginPath();
+                ctx.moveTo(pathPoints[i - 1].x, pathPoints[i - 1].y);
+                ctx.lineTo(pathPoints[i].x, pathPoints[i].y);
+                ctx.strokeStyle = 'black'; // Color de la línea
+                ctx.lineWidth = 3; // Grosor de la línea
+                ctx.stroke();
+            }
+
+            // Dibujar la imagen de Mario
+            ctx.drawImage(marioImagen, marioX, marioY, marioImagen.width / 200, marioImagen.height / 200);
+
+            requestAnimationFrame(drawMario);
+        }
+
+        drawMario();
+
+        // Manejar el movimiento con el ratón
+        canvas.addEventListener('mousemove', function(event) {
+            marioX = event.clientX - canvas.getBoundingClientRect().left - marioImagen.width / 400;
+            marioY = event.clientY - canvas.getBoundingClientRect().top - marioImagen.height / 400;
+
+            // Limitar el movimiento dentro de los límites del canvas
+            marioX = Math.max(0, Math.min(canvas.width - marioImagen.width / 200, marioX));
+            marioY = Math.max(0, Math.min(canvas.height - marioImagen.height / 200, marioY));
+
+            // Agregar el punto actual al camino recorrido
+            pathPoints.push({ x: marioX + marioImagen.width / 400, y: marioY + marioImagen.height / 400 });
+        });
+
+        // Manejar el movimiento con el teclado (WASD)
+        var keysPressed = {}; // Almacena las teclas presionadas
+
+        window.addEventListener('keydown', function(event) {
+            keysPressed[event.key] = true;
+        });
+
+        window.addEventListener('keyup', function(event) {
+            delete keysPressed[event.key];
+        });
+
+        function moveMario() {
+            var dx = 0;
+            var dy = 0;
+
+            if ('w' in keysPressed) dy -= speed;
+            if ('s' in keysPressed) dy += speed;
+            if ('a' in keysPressed) dx -= speed;
+            if ('d' in keysPressed) dx += speed;
+
+            // Movimiento diagonal
+            if (dx !== 0 && dy !== 0) {
+                dx = dx > 0 ? diagonalSpeed : -diagonalSpeed;
+                dy = dy > 0 ? diagonalSpeed : -diagonalSpeed;
+            }
+
+            marioX += dx;
+            marioY += dy;
+
+            // Limitar el movimiento dentro de los límites del canvas
+            marioX = Math.max(0, Math.min(canvas.width - marioImagen.width / 200, marioX));
+            marioY = Math.max(0, Math.min(canvas.height - marioImagen.height / 200, marioY));
+
+            // Agregar el punto actual al camino recorrido
+            pathPoints.push({ x: marioX + marioImagen.width / 400, y: marioY + marioImagen.height / 400 });
+
+            requestAnimationFrame(moveMario);
+        }
+
+        moveMario();
+
+        // Limpiar el camino cuando se hace clic en el canvas
+        canvas.addEventListener('click', function(event) {
+            pathPoints = [];
+        });
+    </script>
+</body>
+</html>
