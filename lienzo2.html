@@ -12,7 +12,8 @@
         var mouseY = canvas.height / 2; // Posición inicial del cursor en Y
         var speed = 5; // Ajusta la velocidad de movimiento
         var diagonalSpeed = Math.sqrt(speed * speed / 2); // Velocidad diagonal basada en la velocidad de movimiento
-        var lineWidth = 3; // Grosor inicial de la línea
+        var initialLineWidth = 3; // Grosor inicial de la línea
+        var lineWidth = initialLineWidth; // Grosor actual de la línea
         var currentColor = 'black'; // Color inicial de la línea
 
         // Array para almacenar los puntos del camino recorrido
@@ -69,6 +70,24 @@
                 case '4':
                     currentColor = 'red';
                     break;
+                case ' ':
+                    // Borrar el contenido del canvas al presionar la barra espaciadora
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    pathPoints = []; // Limpiar los puntos almacenados
+                    break;
+                case '+':
+                    // Aumentar el grosor de la línea al presionar el signo más
+                    lineWidth += 1;
+                    break;
+                case '-':
+                    // Disminuir el grosor de la línea al presionar el signo menos
+                    lineWidth = Math.max(1, lineWidth - 1);
+                    break;
+                case 'r':
+                case 'R':
+                    // Restablecer el grosor de la línea al valor inicial
+                    lineWidth = initialLineWidth;
+                    break;
                 default:
                     break;
             }
@@ -117,11 +136,6 @@
                 // Disminuir el grosor de la línea al hacer scroll hacia abajo
                 lineWidth = Math.max(1, lineWidth - 1);
             }
-        });
-
-        // Limpiar el camino cuando se hace clic en el canvas
-        canvas.addEventListener('click', function(event) {
-            pathPoints = [];
         });
     </script>
 </body>
